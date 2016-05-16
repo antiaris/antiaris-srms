@@ -9,6 +9,7 @@
  * @version 1.0.0
  * @since 1.0.0
  */
+'use strict';
 
 const SRMS = require('../');
 const assert = require('assert');
