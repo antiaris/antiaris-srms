@@ -17,8 +17,13 @@ class SRMS {
     constructor(options) {
         this.__res = {};
         this.opts = _.extend({
-            properties: [],
-            queryResMeta: () => ({})
+            queryResMeta: (resName, type) => ({
+                frequency: 0.5,
+                size: 100,
+                resName,
+                type
+            }),
+            defaultMax: 3
         }, options);
     }
     add(resName, type) {
@@ -30,8 +35,32 @@ class SRMS {
         }
         return this;
     }
-    get(type) {
-        return this.__res[type];
+    get(type, max) {
+        const solutions = [];
+
+        if (!_.isInteger(max) || max < 1) {
+            max = this.opts.defaultMax;
+        }
+
+        const sortedResMeta = this.__res[type].map(resName => {
+            return this.opts.queryResMeta(resName, type);
+        }).sort((prev, next) => {
+            if (prev.frequency > next.frequency) {
+                return 1;
+            } else if (prev.frequency < next.frequency) {
+                return -1;
+            } else {
+                return prev.resName > next.resName ? 1 : -1;
+            }
+        });
+
+        const itemsPerSeg = Math.ceil(sortedResMeta.length / max);
+
+        for (let i = 0; i < max; ++i) {
+            solutions.push(sortedResMeta.slice(i * itemsPerSeg, (i + 1) * itemsPerSeg));
+        }
+
+        return solutions;
     }
 }
 
