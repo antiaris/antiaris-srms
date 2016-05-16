@@ -1,0 +1,57 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Antiaris SRMS by Yanni Nightingale</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <meta name="viewport" content="width=device-width">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>Antiaris SRMS</h1>
+        <p>静态资源优化打包方案</p>
+        <p class="view"><a href="http://github.com/antiaris/antiaris-srms">View the Project on GitHub <small>antiaris/antiaris-srms</small></a></p>
+        <ul>
+          <li><a href="https://github.com/antiaris/antiaris-srms/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/antiaris/antiaris-srms/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="http://github.com/antiaris/antiaris-srms">Fork On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+      <h1>静态资源优化打包</h1>
+      <h2>理论</h2>
+<p>将 <em>M</em> 个文件分成 <em>N</em> 组（设M远大于N）：</p>
+
+$$S_1,S_2,S_3...S_N$$
+
+<p>对于 <em><i>S<sub>n</sub></i></em> 组，设其包含 <em><i>K<sub>n</sub></i></em> 个文件，则显然有：</p>
+
+$$\sum^{N}_{t=1}K_t=M -----(1)$$
+
+<p>假设每个文件有 <em><i>F<sub>t</sub></i></em> 的更新频率和 <em><i>V<sub>t</sub></i></em> 的体积，则在时间段 <em><i>T</i></em> 内，平均一个用户消耗在 <em><i>S<sub>n</sub></i></em> 组文件的流量为：</p>
+$$D_n=max(F_1,F_2...F_{K_n})×T×\sum^{Kn}_{m=1}V_m -----(2)$$
+<p>对于服务端而言，还要考虑用户量，设每个文件的用户量使用量为 <em><i>P<sub>t</sub></i></em>，则服务器消耗在 <em><i>S<sub>n</sub></i></em> 组文件的流量为：</p>
+$$D_n=max(F_1,F_2...F_{K_n})×T×\sum^{Kn}_{m=1}(V_m×P_m) -----(3)$$
+<p>显然，最优的打包组合策略应该是在 <em><i>1<=Q<=N</i></em> 的条件下，下式计算值最小：</p>
+$$\sum^{Q}_{t=1}D_t -----(4)$$
+<h2>应用</h2>
+<p>这是一个组合优化问题，<i>F</i>、<i>V</i>、<i>P</i> 使得使用穷举等精确方法在面对几十上百的文件数量时必然会带来无法忍受的时间消耗。</p>
+<p>在实际应用中，可以根据实际情况适当降维思考，以简化优化算法。例如对服务端的流量消耗不敏感，则问题简化为用户端的流量消耗问题，即(3)式变为(2)式，我们的目标是在求得下列 <em><i>P</i></em> 值时，<em><i>S<sub>n</sub></i></em> 组的所有成员：</p>
+$$P=min(\sum^{Q}_{n=1}{(max(F_1,F_2...F_{K_n})×T×\sum^{Kn}_{m=1}V_m)}) -----(5)$$
+      </section>
+      <footer>
+        <p>This project is maintained by <a href="http://github.com/yanni4night">Yanni Nightingale</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
+    </div>
+    <script src="javascripts/scale.fix.js"></script>
+  </body>
+</html>
